@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cadastros - Flask</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-car-front-fill me-2"></i>
+                Sistema de Cadastros
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#marcas-combustivel">
+                            <i class="bi bi-plus-circle me-1"></i>Cadastros
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#motoristas">
+                            <i class="bi bi-person-plus me-1"></i>Motoristas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tabelas">
+                            <i class="bi bi-table me-1"></i>Tabelas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <!-- Mensagens Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="row">
+                    <div class="col-12">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                                <i class="bi bi-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }} me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Seção: Cadastro de Marcas e Combustível -->
+        <section id="marcas-combustivel" class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Cadastro de Marcas e Combustível
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <!-- Formulário de Marcas -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">
+                                        <i class="bi bi-car-front me-2"></i>Cadastro de Marcas
+                                    </h5>
+                                    <form method="POST" action="/" class="needs-validation" novalidate>
+                                        <input type="hidden" name="form_name" value="form_marca">
+                                        
+                                        <div class="mb-3">
+                                            <label for="nome_marca" class="form-label">
+                                                <i class="bi bi-tag me-1"></i>Nome da Marca
+                                            </label>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="nome_marca" 
+                                                   name="nome_marca" 
+                                                   placeholder="Ex: Ford" 
+                                                   required>
+                                            <div class="invalid-feedback">
+                                                Por favor, informe o nome da marca.
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="nome_modelo" class="form-label">
+                                                <i class="bi bi-car-front me-1"></i>Nome do Modelo
+                                            </label>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="nome_modelo" 
+                                                   name="nome_modelo" 
+                                                   placeholder="Ex: Ka" 
+                                                   required>
+                                            <div class="invalid-feedback">
+                                                Por favor, informe o nome do modelo.
+                                            </div>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-save me-2"></i>Salvar Marca
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formulário de Combustível -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title text-success">
+                                        <i class="bi bi-fuel-pump me-2"></i>Cadastro de Combustível
+                                    </h5>
+                                    <form method="POST" action="/" class="needs-validation" novalidate>
+                                        <input type="hidden" name="form_name" value="form_combustivel">
+                                        
+                                        <div class="mb-3">
+                                            <label for="nome_combustivel" class="form-label">
+                                                <i class="bi bi-fuel-pump me-1"></i>Tipo de Combustível
+                                            </label>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="nome_combustivel" 
+                                                   name="nome_combustivel" 
+                                                   placeholder="Ex: Etanol" 
+                                                   required>
+                                            <div class="invalid-feedback">
+                                                Por favor, informe o tipo de combustível.
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <small class="text-muted">
+                                                <i class="bi bi-info-circle me-1"></i>
+                                                Exemplos: Gasolina, Etanol, Diesel, Flex, Elétrico
+                                            </small>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-success w-100">
+                                            <i class="bi bi-save me-2"></i>Salvar Combustível
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Cadastro de Motorista -->
+        <section id="motoristas" class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Cadastro de Motorista
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/" class="needs-validation" novalidate>
+                        <input type="hidden" name="form_name" value="form_motorista">
+                        
+                        <div class="row g-3">
+                            <!-- Dados Pessoais -->
+                            <div class="col-12">
+                                <h5 class="text-info border-bottom pb-2">
+                                    <i class="bi bi-person me-2"></i>Dados Pessoais
+                                </h5>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="nome_motorista" class="form-label">
+                                    <i class="bi bi-person me-1"></i>Nome Completo *
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="nome_motorista" 
+                                       name="nome_motorista" 
+                                       placeholder="Digite o nome completo" 
+                                       required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe o nome completo.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="cpf" class="form-label">
+                                    <i class="bi bi-card-text me-1"></i>CPF *
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="cpf" 
+                                       name="cpf" 
+                                       placeholder="000.000.000-00" 
+                                       pattern="[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe um CPF válido.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="telefone" class="form-label">
+                                    <i class="bi bi-telephone me-1"></i>Telefone
+                                </label>
+                                <input type="tel" 
+                                       class="form-control" 
+                                       id="telefone" 
+                                       name="telefone" 
+                                       placeholder="(99) 99999-9999">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">
+                                    <i class="bi bi-envelope me-1"></i>Email
+                                </label>
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       name="email" 
+                                       placeholder="nome@email.com">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="dt_nascimento" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>Data de Nascimento
+                                </label>
+                                <input type="date" 
+                                       class="form-control" 
+                                       id="dt_nascimento" 
+                                       name="dt_nascimento">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">
+                                    <i class="bi bi-toggle-on me-1"></i>Status
+                                </label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="Ativo" selected>Ativo</option>
+                                    <option value="Inativo">Inativo</option>
+                                </select>
+                            </div>
+
+                            <!-- Dados da CNH -->
+                            <div class="col-12 mt-4">
+                                <h5 class="text-info border-bottom pb-2">
+                                    <i class="bi bi-credit-card me-2"></i>Dados da CNH
+                                </h5>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="cat_cnh" class="form-label">
+                                    <i class="bi bi-credit-card me-1"></i>Categoria da CNH
+                                </label>
+                                <select class="form-select" id="cat_cnh" name="cat_cnh">
+                                    <option value="">Selecione a categoria</option>
+                                    <option value="A">A - Motocicletas</option>
+                                    <option value="B">B - Automóveis</option>
+                                    <option value="C">C - Caminhões</option>
+                                    <option value="D">D - Ônibus</option>
+                                    <option value="E">E - Carretas</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="val_cnh" class="form-label">
+                                    <i class="bi bi-calendar-check me-1"></i>Validade da CNH
+                                </label>
+                                <input type="date" 
+                                       class="form-control" 
+                                       id="val_cnh" 
+                                       name="val_cnh">
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Botões de Ação -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="reset" class="btn btn-outline-secondary me-md-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Limpar Campos
+                                    </button>
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="bi bi-save me-2"></i>Salvar Motorista
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Tabelas -->
+        <section id="tabelas" class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-table me-2"></i>
+                        Dados Cadastrados
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Tabs para as tabelas -->
+                    <ul class="nav nav-tabs" id="tabelasTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="marcas-tab" data-bs-toggle="tab" data-bs-target="#marcas-pane" type="button" role="tab">
+                                <i class="bi bi-car-front me-1"></i>Marcas
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="combustiveis-tab" data-bs-toggle="tab" data-bs-target="#combustiveis-pane" type="button" role="tab">
+                                <i class="bi bi-fuel-pump me-1"></i>Combustíveis
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="motoristas-tab" data-bs-toggle="tab" data-bs-target="#motoristas-pane" type="button" role="tab">
+                                <i class="bi bi-person me-1"></i>Motoristas
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content mt-3" id="tabelasTabContent">
+                        <!-- Tabela de Marcas -->
+                        <div class="tab-pane fade show active" id="marcas-pane" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Marca</th>
+                                            <th>Modelo</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for marca in marcas %}
+                                        <tr>
+                                            <td>{{ marca.id }}</td>
+                                            <td>{{ marca.Marca }}</td>
+                                            <td>{{ marca.Modelo }}</td>
+                                            <td>
+                                                <form method="POST" action="/" class="d-inline">
+                                                    <input type="hidden" name="form_name" value="form_remover_marca">
+                                                    <input type="hidden" name="id_marca_remover" value="{{ marca.id }}">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                                            onclick="return confirm('Tem certeza que deseja remover esta marca?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">
+                                                <i class="bi bi-inbox me-2"></i>Nenhuma marca cadastrada
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Tabela de Combustíveis -->
+                        <div class="tab-pane fade" id="combustiveis-pane" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Combustível</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for combustivel in combustiveis %}
+                                        <tr>
+                                            <td>{{ combustivel.id }}</td>
+                                            <td>{{ combustivel.Combustível }}</td>
+                                            <td>
+                                                <form method="POST" action="/" class="d-inline">
+                                                    <input type="hidden" name="form_name" value="form_remover_combustivel">
+                                                    <input type="hidden" name="id_combustivel_remover" value="{{ combustivel.id }}">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            onclick="return confirm('Tem certeza que deseja remover este combustível?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">
+                                                <i class="bi bi-inbox me-2"></i>Nenhum combustível cadastrado
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Tabela de Motoristas -->
+                        <div class="tab-pane fade" id="motoristas-pane" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-info">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>CPF</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for motorista in motoristas %}
+                                        <tr>
+                                            <td>{{ motorista.id }}</td>
+                                            <td>{{ motorista.Nome }}</td>
+                                            <td>{{ motorista.CPF }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ 'success' if motorista.Status == 'Ativo' else 'secondary' }}">
+                                                    {{ motorista.Status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">
+                                                <i class="bi bi-inbox me-2"></i>Nenhum motorista cadastrado
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-car-front-fill me-2"></i>Sistema de Cadastros</h5>
+                    <p class="mb-0">Gerenciamento de marcas, combustíveis e motoristas</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <i class="bi bi-calendar me-1"></i>
+                        © {{ current_year }} - Desenvolvido com Flask e Bootstrap
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</body>
+</html>
+
