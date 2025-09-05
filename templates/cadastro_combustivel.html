@@ -1,0 +1,66 @@
+{% extends "template.html" %}
+
+{% block title %}Combustível - Sistema de Gestão de Frota{% endblock %}
+
+{% block content %}
+<!-- Combustível Page -->
+<div class="content-header">
+    <h2><i class="bi bi-fuel-pump me-2"></i>Gestão de Combustível</h2>
+    <p class="mb-0 text-muted">Cadastro e controle de tipos de combustível</p>
+</div>
+
+<div class="content-body">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Novo Combustível</h5>
+                </div>
+                <div class="card-body">
+                    <form id="formCombustivel">
+                        <div class="mb-3">
+                            <label for="nomeCombustivel" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nomeCombustivel" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="precoCombustivel" class="form-label">Preço por Litro (R$)</label>
+                            <input type="number" step="0.01" class="form-control" id="precoCombustivel" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Cadastrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lista de Combustíveis</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Preço/Litro</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaCombustivel">
+                                <!-- Dados serão carregados via JavaScript -->
+                                <tr>
+                                    <td colspan="4" class="text-center">Nenhum combustível cadastrado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

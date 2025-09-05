@@ -1,0 +1,66 @@
+{% extends "template.html" %}
+
+{% block title %}Marcas - Sistema de Gestão de Frota{% endblock %}
+
+{% block content %}
+<!-- Marcas Page -->
+<div class="content-header">
+    <h2><i class="bi bi-bookmark me-2"></i>Gestão de Marcas</h2>
+    <p class="mb-0 text-muted">Cadastro de marcas de veículos</p>
+</div>
+
+<div class="content-body">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Nova Marca</h5>
+                </div>
+                <div class="card-body">
+                    <form id="formMarca">
+                        <div class="mb-3">
+                            <label for="nomeMarca" class="form-label">Nome da Marca</label>
+                            <input type="text" class="form-control" id="nomeMarca" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paisMarca" class="form-label">País de Origem</label>
+                            <input type="text" class="form-control" id="paisMarca">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Cadastrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lista de Marcas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>País</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaMarcas">
+                                <!-- Dados serão carregados via JavaScript -->
+                                <tr>
+                                    <td colspan="4" class="text-center">Nenhuma marca cadastrada</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

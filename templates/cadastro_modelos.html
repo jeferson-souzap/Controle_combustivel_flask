@@ -1,0 +1,73 @@
+{% extends "template.html" %}
+
+{% block title %}Modelos - Sistema de Gestão de Frota{% endblock %}
+
+{% block content %}
+<!-- Modelos Page -->
+<div class="content-header">
+    <h2><i class="bi bi-car-front me-2"></i>Gestão de Modelos</h2>
+    <p class="mb-0 text-muted">Cadastro de modelos de veículos</p>
+</div>
+
+<div class="content-body">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Novo Modelo</h5>
+                </div>
+                <div class="card-body">
+                    <form id="formModelo">
+                        <div class="mb-3">
+                            <label for="nomeModelo" class="form-label">Nome do Modelo</label>
+                            <input type="text" class="form-control" id="nomeModelo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="marcaModelo" class="form-label">Marca</label>
+                            <select class="form-control" id="marcaModelo" required>
+                                <option value="">Selecione uma marca</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="anoModelo" class="form-label">Ano</label>
+                            <input type="number" class="form-control" id="anoModelo" min="1900" max="2030">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Cadastrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lista de Modelos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Marca</th>
+                                    <th>Ano</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaModelos">
+                                <!-- Dados serão carregados via JavaScript -->
+                                <tr>
+                                    <td colspan="5" class="text-center">Nenhum modelo cadastrado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

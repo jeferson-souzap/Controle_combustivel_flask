@@ -1,0 +1,138 @@
+{% extends "template.html" %}
+
+{% block title %}Veículos - Sistema de Gestão de Frota{% endblock %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_veiculos.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<!-- Veículos Page -->
+<div class="content-header">
+    <h2><i class="bi bi-truck me-2"></i>Gestão de Veículos</h2>
+    <p class="mb-0 text-muted">Cadastro e controle da frota de veículos</p>
+</div>
+
+<div class="content-body">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card" style="width: 100%;">
+                <div class="card-header">
+                    <h5 class="mb-0">Novo Veículo</h5>
+                </div>
+                <div class="card-body">
+                    <form id="formVeiculo" class="vehicle-form">
+                        <div class="form-row">
+                            <div class="mb-3">
+                                <label for="marcaVeiculo" class="form-label">Marca</label>
+                                <select class="form-control" id="marcaVeiculo" required>
+                                    <option value="">Selecione uma marca</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="modeloVeiculo" class="form-label">Modelo</label>
+                                <select class="form-control" id="modeloVeiculo" required>
+                                    <option value="">Selecione um modelo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="mb-3">
+                                <label for="combustivelVeiculo" class="form-label">Combustível</label>
+                                <select class="form-control" id="combustivelVeiculo" required>
+                                    <option value="">Selecione um combustível</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="statusVeiculo" class="form-label">Status</label>
+                                <select class="form-control" id="statusVeiculo" required>
+                                    <option value="">Selecione Status</option>
+                                    <option value="Ativo">Ativo</option>
+                                    <option value="Manutenção">Manutenção</option>
+                                    <option value="Inativo">Inativo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="mb-3">
+                                <label for="consumoVeiculo" class="form-label">Consumo km/l</label>
+                                <input type="number" class="form-control" id="consumoVeiculo" min="0.1" max="1000" step="0.1" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="tanqueVeiculo" class="form-label">Capacidade tanque (L)</label>
+                                <input type="number" class="form-control" id="tanqueVeiculo" min="1" max="200" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="mb-3">
+                                <label for="anoVeiculo" class="form-label">Ano</label>
+                                <input type="number" class="form-control" id="anoVeiculo" min="1900" max="2030" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="placaVeiculo" class="form-label">Placa</label>
+                                <input type="text" class="form-control" id="placaVeiculo" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="mb-3">
+                                <label for="corVeiculo" class="form-label">Cor</label>
+                                <input type="text" class="form-control" id="corVeiculo">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="kmVeiculo" class="form-label">Quilometragem</label>
+                                <input type="number" class="form-control" id="kmVeiculo" min="0">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                            <i class="bi bi-plus-circle me-2"></i>Cadastrar Veículo
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lista de Veículos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Placa</th>
+                                    <th>Modelo</th>
+                                    <th>Marca</th>
+                                    <th>Ano</th>
+                                    <th>Cor</th>
+                                    <th>KM</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaVeiculos">
+                                <tr>
+                                    <td colspan="8" class="text-center">Nenhum veículo cadastrado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
