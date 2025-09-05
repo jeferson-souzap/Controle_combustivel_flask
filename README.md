@@ -2,11 +2,11 @@
 
 Um sistema completo para gerenciamento de frotas de veículos desenvolvido em Flask com interface moderna e responsiva.
 
-## 🚀 Acesso Online
+## Acesso Online
 
 **URL da Aplicação:** http:// --
 
-## 📋 Funcionalidades
+## Funcionalidades
 
 ### Dashboard
 
@@ -29,7 +29,7 @@ Um sistema completo para gerenciamento de frotas de veículos desenvolvido em Fl
 - Controle de quilometragem
 - Histórico completo de movimentações
 
-## 🎨 Características da Interface
+## Características da Interface
 
 ### Design Responsivo
 
@@ -44,7 +44,7 @@ Um sistema completo para gerenciamento de frotas de veículos desenvolvido em Fl
 - Formulários validados
 - Tabelas organizadas com ações
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 ### Backend
 
@@ -61,7 +61,7 @@ Um sistema completo para gerenciamento de frotas de veículos desenvolvido em Fl
 - **Chart.js**: Gráficos e visualizações
 - **Bootstrap Icons**: Ícones
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```bash
 gestao-frota/
@@ -91,7 +91,7 @@ gestao-frota/
 └── README.md           # Documentação
 ```
 
-## 🚀 Como Usar
+## Como Usar
 
 1. **Acesse a aplicação**:
 
@@ -109,7 +109,7 @@ Comece cadastrando:
 
 5. **Dashboard**: Acompanhe estatísticas e gráficos
 
-## 📱 Responsividade
+## Responsividade
 
 O sistema é totalmente responsivo e funciona em:
 
@@ -117,14 +117,14 @@ O sistema é totalmente responsivo e funciona em:
 - Tablet (768px - 1199px)
 - Mobile (até 767px)
 
-## 🔒 Segurança
+## Segurança
 
 - Validação de dados no frontend e backend
 - Sanitização de entradas
 - Tratamento de erros
 - CORS configurado adequadamente
 
-## 📈 Próximas Funcionalidades
+## Próximas Funcionalidades
 
 - Relatórios em PDF
 - Exportação de dados
