@@ -36,6 +36,11 @@
                 <span class="menu-text">Dashboard</span>
             </a>
             
+            <a href="{{url_for('movimentacoes')}}" class="menu-item {% if request.path == '/movimentacoes' %}active{% endif %}">
+                <i class="bi bi-arrow-left-right"></i>
+                <span class="menu-text">Movimentações</span>
+            </a>
+            
             <a href="{{url_for('cadastro_combustivel')}}" class="menu-item {% if request.path == '/combustivel' %}active{% endif %}">
                 <i class="bi bi-fuel-pump"></i>
                 <span class="menu-text">Combustível</span>
@@ -56,15 +61,11 @@
                 <span class="menu-text">Veículos</span>
             </a>
             
-            <a href="#" class="menu-item {% if request.path == '/motoristas' %}active{% endif %}">
+            <a href="{{url_for('cadastro_motorista') }}" class="menu-item {% if request.path == '/motoristas' %}active{% endif %}">
                 <i class="bi bi-person-badge"></i>
                 <span class="menu-text">Motoristas</span>
             </a>
             
-            <a href="#" class="menu-item {% if request.path == '/movimentacoes' %}active{% endif %}">
-                <i class="bi bi-arrow-left-right"></i>
-                <span class="menu-text">Movimentações</span>
-            </a>
         </div>
     </div>
 

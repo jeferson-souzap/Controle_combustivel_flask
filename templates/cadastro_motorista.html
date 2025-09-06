@@ -1,0 +1,82 @@
+{% extends "template.html" %}
+
+{% block title %}Motoristas - Sistema de Gestão de Frota{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_motorista.css') }}">
+{% endblock %}
+
+{% block content %}
+ <div id="motoristas" class="page-content">
+            <div class="content-header">
+                <h2><i class="bi bi-person-badge me-2"></i>Gestão de Motoristas</h2>
+                <p class="mb-0 text-muted">Cadastro e controle de motoristas</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Novo Motorista</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="formMotorista">
+                                    <div class="mb-3">
+                                        <label for="nomeMotorista" class="form-label">Nome Completo</label>
+                                        <input type="text" class="form-control" id="nomeMotorista" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cpfMotorista" class="form-label">CPF</label>
+                                        <input type="text" class="form-control" id="cpfMotorista" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cnhMotorista" class="form-label">CNH</label>
+                                        <input type="text" class="form-control" id="cnhMotorista" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="telefoneMotorista" class="form-label">Telefone</label>
+                                        <input type="tel" class="form-control" id="telefoneMotorista">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="emailMotorista" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="emailMotorista">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-circle me-2"></i>Cadastrar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Lista de Motoristas</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nome</th>
+                                                <th>CPF</th>
+                                                <th>CNH</th>
+                                                <th>Telefone</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabelaMotoristas">
+                                            <!-- Dados serão carregados via JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

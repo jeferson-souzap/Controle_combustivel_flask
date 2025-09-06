@@ -1,0 +1,102 @@
+{% extends "template.html" %}
+
+{% block title %}Motoristas - Sistema de Gestão de Frota{% endblock %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_motorista.css') }}">
+{% endblock %}
+
+
+{% block content %}<div id="movimentacoes" class="page-content">
+            <div class="content-header">
+                <h2><i class="bi bi-arrow-left-right me-2"></i>Movimentações</h2>
+                <p class="mb-0 text-muted">Registro de abastecimentos e movimentações da frota</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Nova Movimentação</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="formMovimentacao">
+                                    <div class="mb-3">
+                                        <label for="veiculoMovimentacao" class="form-label">Veículo</label>
+                                        <select class="form-control" id="veiculoMovimentacao" required>
+                                            <option value="">Selecione um veículo</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="motoristaMovimentacao" class="form-label">Motorista</label>
+                                        <select class="form-control" id="motoristaMovimentacao" required>
+                                            <option value="">Selecione um motorista</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="combustivelMovimentacao" class="form-label">Combustível</label>
+                                        <select class="form-control" id="combustivelMovimentacao" required>
+                                            <option value="">Selecione o combustível</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="litrosMovimentacao" class="form-label">Litros</label>
+                                        <input type="number" step="0.01" class="form-control" id="litrosMovimentacao" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="valorMovimentacao" class="form-label">Valor Total (R$)</label>
+                                        <input type="number" step="0.01" class="form-control" id="valorMovimentacao" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kmAtualMovimentacao" class="form-label">KM Atual</label>
+                                        <input type="number" class="form-control" id="kmAtualMovimentacao" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="dataMovimentacao" class="form-label">Data</label>
+                                        <input type="datetime-local" class="form-control" id="dataMovimentacao" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-circle me-2"></i>Registrar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Histórico de Movimentações</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Veículo</th>
+                                                <th>Motorista</th>
+                                                <th>Combustível</th>
+                                                <th>Litros</th>
+                                                <th>Valor</th>
+                                                <th>KM</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabelaMovimentacoes">
+                                            <!-- Dados serão carregados via JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
