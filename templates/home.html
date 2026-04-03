@@ -1,7 +1,119 @@
 {% extends "template.html" %}
 
-{% block titulo %}Página Inicial{% endblock %}
+{% block title %}Dashboard - Sistema de Gestão de Frota{% endblock %}
 
-{% block conteudo %}
+{% block content %}
+<div class="content-header">
+    <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+    <p class="mb-0 text-muted">Visão geral da frota</p>
+</div>
 
+<div class="content-body">
+    <!-- Cards de estatísticas -->
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="stats-card">
+                <div class="stats-icon text-primary"><i class="bi bi-truck"></i></div>
+                <div class="stats-number text-primary">{{ stats.total_veiculos }}</div>
+                <div class="stats-label">Veículos Ativos</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stats-card">
+                <div class="stats-icon text-success"><i class="bi bi-person-badge"></i></div>
+                <div class="stats-number text-success">{{ stats.total_motoristas }}</div>
+                <div class="stats-label">Motoristas Ativos</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stats-card">
+                <div class="stats-icon text-warning"><i class="bi bi-arrow-left-right"></i></div>
+                <div class="stats-number text-warning">{{ stats.total_mov_mes }}</div>
+                <div class="stats-label">Movimentações este Mês</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stats-card">
+                <div class="stats-icon text-danger"><i class="bi bi-cash-stack"></i></div>
+                <div class="stats-number text-danger" style="font-size:1.4rem;">
+                    R$ {{ "%.2f"|format(stats.total_gasto_mes) }}
+                </div>
+                <div class="stats-label">Gasto com Combustível (mês)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Segunda linha de cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="stats-card">
+                <div class="stats-icon text-info"><i class="bi bi-fuel-pump"></i></div>
+                <div class="stats-number text-info">{{ stats.total_combustiveis }}</div>
+                <div class="stats-label">Tipos de Combustível</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stats-card">
+                <div class="stats-icon" style="color:#6f42c1;"><i class="bi bi-droplet-half"></i></div>
+                <div class="stats-number" style="color:#6f42c1;">{{ stats.total_litros_mes }}</div>
+                <div class="stats-label">Litros Abastecidos (mês)</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-6">
+            <div class="stats-card text-start">
+                <p class="mb-2 text-muted" style="font-size:.85rem;">Acesso rápido</p>
+                <a href="{{ url_for('movimentacoes') }}" class="btn btn-sm btn-primary me-2 mb-1">
+                    <i class="bi bi-plus-circle me-1"></i>Nova Movimentação
+                </a>
+                <a href="{{ url_for('cadastro_veiculos') }}" class="btn btn-sm btn-outline-primary me-2 mb-1">
+                    <i class="bi bi-truck me-1"></i>Novo Veículo
+                </a>
+                <a href="{{ url_for('cadastro_motorista') }}" class="btn btn-sm btn-outline-success me-2 mb-1">
+                    <i class="bi bi-person-badge me-1"></i>Novo Motorista
+                </a>
+                <a href="{{ url_for('cadastro_postos') }}" class="btn btn-sm btn-outline-warning mb-1">
+                    <i class="bi bi-geo-alt me-1"></i>Novo Posto
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimas movimentações -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Últimas Movimentações</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Data</th><th>Veículo</th><th>Motorista</th><th>Litros</th><th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if stats.ultimas_movimentacoes %}
+                            {% for m in stats.ultimas_movimentacoes %}
+                            <tr>
+                                <td>{{ m.data }}</td>
+                                <td>{{ m.veiculo or '-' }}</td>
+                                <td>{{ m.motorista or '-' }}</td>
+                                <td>{{ "%.2f L"|format(m.litros) if m.litros else '-' }}</td>
+                                <td>{{ "R$ %.2f"|format(m.valor) if m.valor else '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-3">
+                                    Nenhuma movimentação registrada ainda.
+                                    <a href="{{ url_for('movimentacoes') }}">Registrar agora</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

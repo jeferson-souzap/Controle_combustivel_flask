@@ -7,11 +7,11 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap-icons.css') }}" rel="stylesheet">
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/chart.min.js') }}" defer></script>
     <!-- css principal -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
     
@@ -41,29 +41,39 @@
                 <span class="menu-text">Movimentações</span>
             </a>
             
-            <a href="{{url_for('cadastro_combustivel')}}" class="menu-item {% if request.path == '/combustivel' %}active{% endif %}">
+            <a href="{{url_for('cadastro_combustivel')}}" class="menu-item {% if request.path == '/cadastro_combustivel' %}active{% endif %}">
                 <i class="bi bi-fuel-pump"></i>
                 <span class="menu-text">Combustível</span>
             </a>
-            
-            <a href="{{url_for('cadastro_marcas') }}" class="menu-item {% if request.path == '/marcas' %}active{% endif %}">
+
+            <a href="{{url_for('cadastro_marcas') }}" class="menu-item {% if request.path == '/cadastro_marcas' %}active{% endif %}">
                 <i class="bi bi-bookmark"></i>
                 <span class="menu-text">Marcas</span>
             </a>
-            
-            <a href="{{url_for('cadastro_modelos')}}" class="menu-item {% if request.path == '/modelos' %}active{% endif %}">
+
+            <a href="{{url_for('cadastro_modelos')}}" class="menu-item {% if request.path == '/cadastro_modelos' %}active{% endif %}">
                 <i class="bi bi-car-front"></i>
                 <span class="menu-text">Modelos</span>
             </a>
-            
-            <a href="{{url_for('cadastro_veiculos')}}" class="menu-item {% if request.path == '/veiculos' %}active{% endif %}">
+
+            <a href="{{url_for('cadastro_veiculos')}}" class="menu-item {% if request.path == '/cadastro_veiculos' %}active{% endif %}">
                 <i class="bi bi-truck"></i>
                 <span class="menu-text">Veículos</span>
             </a>
-            
-            <a href="{{url_for('cadastro_motorista') }}" class="menu-item {% if request.path == '/motoristas' %}active{% endif %}">
+
+            <a href="{{url_for('cadastro_motorista') }}" class="menu-item {% if request.path == '/cadastro_motorista' %}active{% endif %}">
                 <i class="bi bi-person-badge"></i>
                 <span class="menu-text">Motoristas</span>
+            </a>
+
+            <a href="{{url_for('cadastro_rotas')}}" class="menu-item {% if request.path == '/cadastro_rotas' %}active{% endif %}">
+                <i class="bi bi-signpost-split"></i>
+                <span class="menu-text">Rotas</span>
+            </a>
+
+            <a href="{{url_for('cadastro_postos')}}" class="menu-item {% if request.path == '/cadastro_postos' %}active{% endif %}">
+                <i class="bi bi-geo-alt"></i>
+                <span class="menu-text">Postos</span>
             </a>
             
         </div>
@@ -71,11 +81,23 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="px-4 pt-3">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     
     <!-- Application JavaScript -->
     <script src="{{ url_for('static', filename='js/template.js') }}"></script>

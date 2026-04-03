@@ -3,7 +3,6 @@
 {% block title %}Marcas - Sistema de Gestão de Frota{% endblock %}
 
 {% block content %}
-<!-- Marcas Page -->
 <div class="content-header">
     <h2><i class="bi bi-bookmark me-2"></i>Gestão de Marcas</h2>
     <p class="mb-0 text-muted">Cadastro de marcas de veículos</p>
@@ -13,18 +12,12 @@
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Nova Marca</h5>
-                </div>
+                <div class="card-header"><h5 class="mb-0">Nova Marca</h5></div>
                 <div class="card-body">
-                    <form id="formMarca">
+                    <form method="post" action="{{ url_for('cadastro_marcas') }}">
                         <div class="mb-3">
-                            <label for="nomeMarca" class="form-label">Nome da Marca</label>
-                            <input type="text" class="form-control" id="nomeMarca" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="paisMarca" class="form-label">País de Origem</label>
-                            <input type="text" class="form-control" id="paisMarca">
+                            <label class="form-label">Nome da Marca</label>
+                            <input type="text" class="form-control" name="nomeMarca" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">
                             <i class="bi bi-plus-circle me-2"></i>Cadastrar
@@ -33,28 +26,39 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Lista de Marcas</h5>
-                </div>
+                <div class="card-header"><h5 class="mb-0">Lista de Marcas</h5></div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover mb-0">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nome</th>
-                                    <th>País</th>
-                                    <th>Ações</th>
-                                </tr>
+                                <tr><th>ID</th><th>Nome</th><th>Ações</th></tr>
                             </thead>
-                            <tbody id="tabelaMarcas">
-                                <!-- Dados serão carregados via JavaScript -->
-                                <tr>
-                                    <td colspan="4" class="text-center">Nenhuma marca cadastrada</td>
-                                </tr>
+                            <tbody>
+                                {% if marcas %}
+                                    {% for m in marcas %}
+                                    <tr>
+                                        <td>{{ m.id }}</td>
+                                        <td>{{ m.nome }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning me-1"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditMarca"
+                                                    data-id="{{ m.id }}" data-nome="{{ m.nome }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <a href="{{ url_for('delete_marca', mid=m.id) }}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Remover marca?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="3" class="text-center text-muted">Nenhuma marca cadastrada</td></tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -63,4 +67,38 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Editar Marca -->
+<div class="modal fade" id="modalEditMarca" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#3498db,#5dade2);color:white;">
+                <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Marca</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="formEditMarca">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nome da Marca</label>
+                        <input type="text" class="form-control" name="nomeMarca" id="editNomeMarca" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('modalEditMarca').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    document.getElementById('formEditMarca').action = '/edit_marca/' + btn.dataset.id;
+    document.getElementById('editNomeMarca').value = btn.dataset.nome;
+});
+</script>
 {% endblock %}

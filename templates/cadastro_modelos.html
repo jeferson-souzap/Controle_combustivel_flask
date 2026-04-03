@@ -3,7 +3,6 @@
 {% block title %}Modelos - Sistema de Gestão de Frota{% endblock %}
 
 {% block content %}
-<!-- Modelos Page -->
 <div class="content-header">
     <h2><i class="bi bi-car-front me-2"></i>Gestão de Modelos</h2>
     <p class="mb-0 text-muted">Cadastro de modelos de veículos</p>
@@ -13,24 +12,21 @@
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Novo Modelo</h5>
-                </div>
+                <div class="card-header"><h5 class="mb-0">Novo Modelo</h5></div>
                 <div class="card-body">
-                    <form id="formModelo">
+                    <form method="post" action="{{ url_for('cadastro_modelos') }}">
                         <div class="mb-3">
-                            <label for="nomeModelo" class="form-label">Nome do Modelo</label>
-                            <input type="text" class="form-control" id="nomeModelo" required>
+                            <label class="form-label">Nome do Modelo</label>
+                            <input type="text" class="form-control" name="nomeModelo" required>
                         </div>
                         <div class="mb-3">
-                            <label for="marcaModelo" class="form-label">Marca</label>
-                            <select class="form-control" id="marcaModelo" required>
+                            <label class="form-label">Marca</label>
+                            <select class="form-control" name="marcaModelo" required>
                                 <option value="">Selecione uma marca</option>
+                                {% for m in marcas %}
+                                <option value="{{ m.id }}">{{ m.nome }}</option>
+                                {% endfor %}
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="anoModelo" class="form-label">Ano</label>
-                            <input type="number" class="form-control" id="anoModelo" min="1900" max="2030">
                         </div>
                         <button type="submit" class="btn btn-primary w-100">
                             <i class="bi bi-plus-circle me-2"></i>Cadastrar
@@ -39,29 +35,42 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Lista de Modelos</h5>
-                </div>
+                <div class="card-header"><h5 class="mb-0">Lista de Modelos</h5></div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover mb-0">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nome</th>
-                                    <th>Marca</th>
-                                    <th>Ano</th>
-                                    <th>Ações</th>
-                                </tr>
+                                <tr><th>ID</th><th>Nome</th><th>Marca</th><th>Ações</th></tr>
                             </thead>
-                            <tbody id="tabelaModelos">
-                                <!-- Dados serão carregados via JavaScript -->
-                                <tr>
-                                    <td colspan="5" class="text-center">Nenhum modelo cadastrado</td>
-                                </tr>
+                            <tbody>
+                                {% if modelos %}
+                                    {% for mo in modelos %}
+                                    <tr>
+                                        <td>{{ mo.id }}</td>
+                                        <td>{{ mo.nome }}</td>
+                                        <td>{{ mo.marca or '-' }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning me-1"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditModelo"
+                                                    data-id="{{ mo.id }}"
+                                                    data-nome="{{ mo.nome }}"
+                                                    data-marca="{{ mo.fk_marca_id }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <a href="{{ url_for('delete_modelo', mid=mo.id) }}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Remover modelo?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="4" class="text-center text-muted">Nenhum modelo cadastrado</td></tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -70,4 +79,48 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Editar Modelo -->
+<div class="modal fade" id="modalEditModelo" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#3498db,#5dade2);color:white;">
+                <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Modelo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="formEditModelo">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Modelo</label>
+                        <input type="text" class="form-control" name="nomeModelo" id="editNomeModelo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Marca</label>
+                        <select class="form-control" name="marcaModelo" id="editMarcaModelo" required>
+                            <option value="">Selecione</option>
+                            {% for m in marcas %}
+                            <option value="{{ m.id }}">{{ m.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('modalEditModelo').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    document.getElementById('formEditModelo').action = '/edit_modelo/' + btn.dataset.id;
+    document.getElementById('editNomeModelo').value = btn.dataset.nome;
+    document.getElementById('editMarcaModelo').value = btn.dataset.marca;
+});
+</script>
 {% endblock %}

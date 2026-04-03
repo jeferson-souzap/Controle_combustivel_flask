@@ -1,0 +1,252 @@
+{% extends "template.html" %}
+
+{% block title %}Postos - Sistema de Gestão de Frota{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h2><i class="bi bi-geo-alt me-2"></i>Gestão de Postos</h2>
+    <p class="mb-0 text-muted">Cadastro de postos de combustível e histórico de preços</p>
+</div>
+
+<div class="content-body">
+
+    <!-- Postos -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Novo Posto</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('cadastro_postos') }}">
+                        <div class="mb-3">
+                            <label class="form-label">Nome do Posto</label>
+                            <input type="text" class="form-control" name="nomePosto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Endereço</label>
+                            <input type="text" class="form-control" name="enderecoPosto">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cidade</label>
+                            <input type="text" class="form-control" name="cidadePosto">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado (UF)</label>
+                            <select class="form-control" name="estadoPosto">
+                                <option value="">Selecione</option>
+                                {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+                                <option value="{{ uf }}">{{ uf }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Cadastrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lista de Postos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Cidade</th>
+                                    <th>UF</th>
+                                    <th>Endereço</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if postos %}
+                                    {% for p in postos %}
+                                    <tr>
+                                        <td><strong>{{ p.nome }}</strong></td>
+                                        <td>{{ p.cidade or '-' }}</td>
+                                        <td>{{ p.estado or '-' }}</td>
+                                        <td>{{ p.endereco or '-' }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning me-1"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditPosto"
+                                                    data-id="{{ p.id }}"
+                                                    data-nome="{{ p.nome }}"
+                                                    data-endereco="{{ p.endereco or '' }}"
+                                                    data-cidade="{{ p.cidade or '' }}"
+                                                    data-estado="{{ p.estado or '' }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <a href="{{ url_for('delete_posto', pid=p.id) }}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Remover posto?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Nenhum posto cadastrado</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Histórico de Preços -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-tag me-2"></i>Registrar Preço</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('add_historico_preco') }}">
+                        <div class="mb-3">
+                            <label class="form-label">Posto</label>
+                            <select class="form-control" name="postoPreco" required>
+                                <option value="">Selecione</option>
+                                {% for p in postos %}
+                                <option value="{{ p.id }}">{{ p.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Combustível</label>
+                            <select class="form-control" name="combustivelPreco" required>
+                                <option value="">Selecione</option>
+                                {% for c in combustiveis %}
+                                <option value="{{ c[0] }}">{{ c[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Preço por Litro (R$)</label>
+                            <input type="number" step="0.001" min="0" class="form-control" name="precoLitro" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Data da Coleta</label>
+                            <input type="date" class="form-control" name="dataPreco" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Registrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Histórico de Preços</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Posto</th>
+                                    <th>Combustível</th>
+                                    <th>Preço/L</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if historico %}
+                                    {% for h in historico %}
+                                    <tr>
+                                        <td>{{ h.data_coleta }}</td>
+                                        <td>{{ h.posto or '-' }}</td>
+                                        <td>{{ h.combustivel or '-' }}</td>
+                                        <td>R$ {{ "%.3f"|format(h.preco_litro) }}</td>
+                                        <td>
+                                            <a href="{{ url_for('delete_preco', hid=h.id) }}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Remover registro?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Nenhum preço registrado</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Posto -->
+<div class="modal fade" id="modalEditPosto" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#3498db,#5dade2);color:white;">
+                <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Posto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="formEditPosto">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Posto</label>
+                        <input type="text" class="form-control" name="nomePosto" id="editNomePosto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Endereço</label>
+                        <input type="text" class="form-control" name="enderecoPosto" id="editEnderecoPosto">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cidade</label>
+                        <input type="text" class="form-control" name="cidadePosto" id="editCidadePosto">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estado (UF)</label>
+                        <select class="form-control" name="estadoPosto" id="editEstadoPosto">
+                            <option value="">Selecione</option>
+                            {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+                            <option value="{{ uf }}">{{ uf }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('modalEditPosto').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    document.getElementById('formEditPosto').action = '/edit_posto/' + btn.dataset.id;
+    document.getElementById('editNomePosto').value     = btn.dataset.nome;
+    document.getElementById('editEnderecoPosto').value = btn.dataset.endereco;
+    document.getElementById('editCidadePosto').value   = btn.dataset.cidade;
+    const sel = document.getElementById('editEstadoPosto');
+    sel.value = btn.dataset.estado;
+});
+</script>
+{% endblock %}

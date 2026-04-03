@@ -1,0 +1,161 @@
+{% extends "template.html" %}
+
+{% block title %}Rotas - Sistema de Gestão de Frota{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h2><i class="bi bi-signpost-split me-2"></i>Gestão de Rotas</h2>
+    <p class="mb-0 text-muted">Cadastro de rotas e trajetos da frota</p>
+</div>
+
+<div class="content-body">
+    <div class="row">
+        <!-- Formulário cadastro -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Nova Rota</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('cadastro_rotas') }}">
+                        <div class="mb-3">
+                            <label class="form-label">Nome da Rota</label>
+                            <input type="text" class="form-control" name="nomeRota" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Origem</label>
+                            <input type="text" class="form-control" name="origemRota" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Destino</label>
+                            <input type="text" class="form-control" name="destinoRota" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Distância (km)</label>
+                            <input type="number" step="0.1" min="0" class="form-control" name="distanciaRota">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" name="descricaoRota" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Cadastrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lista de Rotas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Origem</th>
+                                    <th>Destino</th>
+                                    <th>Distância</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if rotas %}
+                                    {% for r in rotas %}
+                                    <tr>
+                                        <td><strong>{{ r.nome }}</strong></td>
+                                        <td>{{ r.origem }}</td>
+                                        <td>{{ r.destino }}</td>
+                                        <td>{{ "%.1f km"|format(r.distancia_km) if r.distancia_km else '-' }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning me-1"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditRota"
+                                                    data-id="{{ r.id }}"
+                                                    data-nome="{{ r.nome }}"
+                                                    data-origem="{{ r.origem }}"
+                                                    data-destino="{{ r.destino }}"
+                                                    data-distancia="{{ r.distancia_km or '' }}"
+                                                    data-descricao="{{ r.descricao or '' }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <a href="{{ url_for('delete_rota', rid=r.id) }}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Remover rota?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Nenhuma rota cadastrada</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal fade" id="modalEditRota" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#3498db,#5dade2);color:white;">
+                <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Rota</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="formEditRota">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nome da Rota</label>
+                        <input type="text" class="form-control" name="nomeRota" id="editNomeRota" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Origem</label>
+                        <input type="text" class="form-control" name="origemRota" id="editOrigemRota" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Destino</label>
+                        <input type="text" class="form-control" name="destinoRota" id="editDestinoRota" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Distância (km)</label>
+                        <input type="number" step="0.1" min="0" class="form-control" name="distanciaRota" id="editDistanciaRota">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" name="descricaoRota" id="editDescricaoRota" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('modalEditRota').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    document.getElementById('formEditRota').action = '/edit_rota/' + btn.dataset.id;
+    document.getElementById('editNomeRota').value      = btn.dataset.nome;
+    document.getElementById('editOrigemRota').value    = btn.dataset.origem;
+    document.getElementById('editDestinoRota').value   = btn.dataset.destino;
+    document.getElementById('editDistanciaRota').value = btn.dataset.distancia;
+    document.getElementById('editDescricaoRota').value = btn.dataset.descricao;
+});
+</script>
+{% endblock %}

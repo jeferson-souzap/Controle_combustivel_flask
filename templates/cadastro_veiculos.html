@@ -2,14 +2,11 @@
 
 {% block title %}Veículos - Sistema de Gestão de Frota{% endblock %}
 
-
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_veiculos.css') }}">
 {% endblock %}
 
-
 {% block content %}
-<!-- Veículos Page -->
 <div class="content-header">
     <h2><i class="bi bi-truck me-2"></i>Gestão de Veículos</h2>
     <p class="mb-0 text-muted">Cadastro e controle da frota de veículos</p>
@@ -17,116 +14,121 @@
 
 <div class="content-body">
     <div class="row">
+        <!-- Formulário cadastro -->
         <div class="col-md-4 mb-4">
-            <div class="card" style="width: 100%;">
-                <div class="card-header">
-                    <h5 class="mb-0">Novo Veículo</h5>
-                </div>
+            <div class="card">
+                <div class="card-header"><h5 class="mb-0">Novo Veículo</h5></div>
                 <div class="card-body">
-                    <form id="formVeiculo" class="vehicle-form">
-                        <div class="form-row">
-                            <div class="mb-3">
-                                <label for="marcaVeiculo" class="form-label">Marca</label>
-                                <select class="form-control" id="marcaVeiculo" required>
-                                    <option value="">Selecione uma marca</option>
-                                </select>
+                    <form method="post" action="{{ url_for('cadastro_veiculos') }}">
+                        <div class="mb-3">
+                            <label class="form-label">Marca</label>
+                            <select class="form-control" name="marcaVeiculo" id="marcaVeiculo" required>
+                                <option value="">Selecione</option>
+                                {% for m in marcas %}<option value="{{ m.id }}">{{ m.nome }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Modelo</label>
+                            <select class="form-control" name="modeloVeiculo" id="modeloVeiculo" required>
+                                <option value="">Selecione um modelo</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Combustível</label>
+                            <select class="form-control" name="combustivelVeiculo" required>
+                                <option value="">Selecione</option>
+                                {% for c in combustiveis %}<option value="{{ c[0] }}">{{ c[1] }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-control" name="statusVeiculo" required>
+                                <option value="Ativo">Ativo</option>
+                                <option value="Manutenção">Manutenção</option>
+                                <option value="Inativo">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Consumo (km/l)</label>
+                                <input type="number" step="0.1" min="0.1" class="form-control" name="consumoVeiculo" required>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="modeloVeiculo" class="form-label">Modelo</label>
-                                <select class="form-control" id="modeloVeiculo" required>
-                                    <option value="">Selecione um modelo</option>
-                                </select>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Tanque (L)</label>
+                                <input type="number" min="1" class="form-control" name="tanqueVeiculo" required>
                             </div>
                         </div>
-
-                        <div class="form-row">
-                            <div class="mb-3">
-                                <label for="combustivelVeiculo" class="form-label">Combustível</label>
-                                <select class="form-control" id="combustivelVeiculo" required>
-                                    <option value="">Selecione um combustível</option>
-                                </select>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Ano</label>
+                                <input type="number" min="1900" max="2030" class="form-control" name="anoVeiculo" required>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="statusVeiculo" class="form-label">Status</label>
-                                <select class="form-control" id="statusVeiculo" required>
-                                    <option value="">Selecione Status</option>
-                                    <option value="Ativo">Ativo</option>
-                                    <option value="Manutenção">Manutenção</option>
-                                    <option value="Inativo">Inativo</option>
-                                </select>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Placa</label>
+                                <input type="text" class="form-control" name="placaVeiculo" required>
                             </div>
                         </div>
-
-                        <div class="form-row">
-                            <div class="mb-3">
-                                <label for="consumoVeiculo" class="form-label">Consumo km/l</label>
-                                <input type="number" class="form-control" id="consumoVeiculo" min="0.1" max="1000" step="0.1" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="tanqueVeiculo" class="form-label">Capacidade tanque (L)</label>
-                                <input type="number" class="form-control" id="tanqueVeiculo" min="1" max="200" required>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="mb-3">
-                                <label for="anoVeiculo" class="form-label">Ano</label>
-                                <input type="number" class="form-control" id="anoVeiculo" min="1900" max="2030" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="placaVeiculo" class="form-label">Placa</label>
-                                <input type="text" class="form-control" id="placaVeiculo" required>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="mb-3">
-                                <label for="corVeiculo" class="form-label">Cor</label>
-                                <input type="text" class="form-control" id="corVeiculo">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="kmVeiculo" class="form-label">Quilometragem</label>
-                                <input type="number" class="form-control" id="kmVeiculo" min="0">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                        <button type="submit" class="btn btn-primary w-100 mt-1">
                             <i class="bi bi-plus-circle me-2"></i>Cadastrar Veículo
                         </button>
                     </form>
                 </div>
             </div>
         </div>
-        
-        <div class="row">
+
+        <!-- Tabela -->
+        <div class="col-md-8">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Lista de Veículos</h5>
-                </div>
+                <div class="card-header"><h5 class="mb-0">Lista de Veículos</h5></div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th>Placa</th>
-                                    <th>Modelo</th>
-                                    <th>Marca</th>
-                                    <th>Ano</th>
-                                    <th>Cor</th>
-                                    <th>KM</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
+                                    <th>Placa</th><th>Marca</th><th>Modelo</th><th>Ano</th>
+                                    <th>Combustível</th><th>Consumo</th><th>Status</th><th>Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabelaVeiculos">
-                                <tr>
-                                    <td colspan="8" class="text-center">Nenhum veículo cadastrado</td>
-                                </tr>
+                            <tbody>
+                                {% if veiculos %}
+                                    {% for v in veiculos %}
+                                    <tr>
+                                        <td><strong>{{ v.placa }}</strong></td>
+                                        <td>{{ v.marca or '-' }}</td>
+                                        <td>{{ v.modelo or '-' }}</td>
+                                        <td>{{ v.ano }}</td>
+                                        <td>{{ v.combustivel or '-' }}</td>
+                                        <td>{{ v.consumo_km_litro }} km/l</td>
+                                        <td>
+                                            <span class="badge bg-{{ 'success' if v.status else 'secondary' }}">
+                                                {{ 'Ativo' if v.status else 'Inativo' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning me-1"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditVeiculo"
+                                                    data-id="{{ v.id }}"
+                                                    data-placa="{{ v.placa }}"
+                                                    data-marca="{{ v.fk_marca_id }}"
+                                                    data-modelo="{{ v.fk_modelo_id }}"
+                                                    data-combustivel="{{ v.fk_combustivel_id }}"
+                                                    data-consumo="{{ v.consumo_km_litro }}"
+                                                    data-tanque="{{ v.capacidade_tanque }}"
+                                                    data-ano="{{ v.ano }}"
+                                                    data-status="{{ 'Ativo' if v.status else 'Inativo' }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <a href="{{ url_for('delete_veiculo', vid=v.id) }}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Remover veículo?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="8" class="text-center text-muted">Nenhum veículo cadastrado</td></tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -135,4 +137,114 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Editar Veículo -->
+<div class="modal fade" id="modalEditVeiculo" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#3498db,#5dade2);color:white;">
+                <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Veículo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="formEditVeiculo">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Marca</label>
+                            <select class="form-control" name="marcaVeiculo" id="editMarcaVeiculo" required>
+                                <option value="">Selecione</option>
+                                {% for m in marcas %}<option value="{{ m.id }}">{{ m.nome }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Modelo</label>
+                            <select class="form-control" name="modeloVeiculo" id="editModeloVeiculo" required>
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Combustível</label>
+                            <select class="form-control" name="combustivelVeiculo" id="editCombustivelVeiculo" required>
+                                <option value="">Selecione</option>
+                                {% for c in combustiveis %}<option value="{{ c[0] }}">{{ c[1] }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-control" name="statusVeiculo" id="editStatusVeiculo" required>
+                                <option value="Ativo">Ativo</option>
+                                <option value="Manutenção">Manutenção</option>
+                                <option value="Inativo">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Consumo (km/l)</label>
+                            <input type="number" step="0.1" min="0.1" class="form-control" name="consumoVeiculo" id="editConsumoVeiculo" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Tanque (L)</label>
+                            <input type="number" min="1" class="form-control" name="tanqueVeiculo" id="editTanqueVeiculo" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Ano</label>
+                            <input type="number" min="1900" max="2030" class="form-control" name="anoVeiculo" id="editAnoVeiculo" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Placa</label>
+                            <input type="text" class="form-control" name="placaVeiculo" id="editPlacaVeiculo" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Dropdown de modelos no formulário de cadastro
+document.getElementById('marcaVeiculo').addEventListener('change', function() {
+    carregarModelos(this.value, 'modeloVeiculo', null);
+});
+
+// Dropdown de modelos no modal de edição
+document.getElementById('editMarcaVeiculo').addEventListener('change', function() {
+    carregarModelos(this.value, 'editModeloVeiculo', null);
+});
+
+function carregarModelos(marcaId, selectId, modeloSelecionado) {
+    const sel = document.getElementById(selectId);
+    sel.innerHTML = '<option value="">Selecione um modelo</option>';
+    if (!marcaId) return;
+    fetch('/api/modelos?marca_id=' + marcaId)
+        .then(r => r.json())
+        .then(data => {
+            data.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.id;
+                opt.textContent = m.nome;
+                if (modeloSelecionado && m.id == modeloSelecionado) opt.selected = true;
+                sel.appendChild(opt);
+            });
+        });
+}
+
+document.getElementById('modalEditVeiculo').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    document.getElementById('formEditVeiculo').action   = '/edit_veiculo/' + btn.dataset.id;
+    document.getElementById('editPlacaVeiculo').value   = btn.dataset.placa;
+    document.getElementById('editMarcaVeiculo').value   = btn.dataset.marca;
+    document.getElementById('editCombustivelVeiculo').value = btn.dataset.combustivel;
+    document.getElementById('editConsumoVeiculo').value = btn.dataset.consumo;
+    document.getElementById('editTanqueVeiculo').value  = btn.dataset.tanque;
+    document.getElementById('editAnoVeiculo').value     = btn.dataset.ano;
+    document.getElementById('editStatusVeiculo').value  = btn.dataset.status;
+    carregarModelos(btn.dataset.marca, 'editModeloVeiculo', btn.dataset.modelo);
+});
+</script>
 {% endblock %}
