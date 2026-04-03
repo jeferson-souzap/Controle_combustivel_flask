@@ -1,10 +1,10 @@
-# 🚛 Sistema de Gestão de Frota
+# Sistema de Gestão de Frota
 
 > Aplicação web completa para controle e gerenciamento de frotas de veículos, desenvolvida com **Python + Flask** e banco de dados **SQLite**.
 
 ---
 
-## 📋 Índice
+## Índice
 
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Funcionalidades](#-funcionalidades)
@@ -16,13 +16,13 @@
 
 ---
 
-## 💡 Sobre o Projeto
+## Sobre o Projeto
 
 Sistema web para gerenciamento completo de frotas, permitindo o controle de veículos, motoristas, abastecimentos, rotas e postos de combustível. Ideal para empresas que precisam acompanhar os custos operacionais e o histórico de movimentações da frota.
 
 ---
 
-## ✅ Funcionalidades
+## Funcionalidades
 
 ### Dashboard
 - Cards com totais de veículos ativos, motoristas, movimentações e gastos do mês
@@ -70,7 +70,7 @@ Sistema web para gerenciamento completo de frotas, permitindo o controle de veí
 
 ---
 
-## 🛠 Tecnologias
+## Tecnologias
 
 | Camada | Tecnologia |
 |--------|-----------|
@@ -84,7 +84,7 @@ Sistema web para gerenciamento completo de frotas, permitindo o controle de veí
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 Controle_combustivel_flask/
@@ -135,7 +135,7 @@ Controle_combustivel_flask/
 
 ---
 
-## 🗄 Banco de Dados
+## Banco de Dados
 
 O banco é criado e migrado automaticamente na primeira execução. O esquema contempla 9 tabelas interligadas:
 
@@ -167,7 +167,7 @@ posto ──┬─────────────────────�
 
 ---
 
-## ▶ Como Executar
+## Como Executar
 
 ### Pré-requisitos
 
@@ -205,7 +205,7 @@ http://127.0.0.1:5000
 
 ---
 
-## 🖥 Telas do Sistema
+## Telas do Sistema
 
 | Rota | Descrição |
 |------|-----------|
@@ -227,7 +227,7 @@ http://127.0.0.1:5000
 
 ---
 
-## 📄 Licença
+## Licença
 
 Este projeto está sob a licença MIT. Sinta-se livre para usar, modificar e distribuir.
 
